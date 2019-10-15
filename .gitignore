@@ -5,6 +5,8 @@ node_modules
 # local env files
 .env.local
 .env.*.local
+__pycache__
+env/
 
 # Log files
 npm-debug.log*
@@ -19,3 +21,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Credentials
+*auth.py

@@ -1,11 +1,11 @@
 <template>
-  <v-app-bar app>
+  <v-app>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span class="font-weight-light">Examine my twitter followers</span>
+        <span class="font-weight-light">Get Twitter Follower Topics</span>
       </v-toolbar-title>
     </v-toolbar>
-<v-content>
+    <v-content>
       <HelloWorld/>
     </v-content>
   </v-app>

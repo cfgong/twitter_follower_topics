@@ -6,7 +6,6 @@ Vue.config.productionTip = false
 Vue.use(Vuetify)
 export default new Vuetify({ })
 
-
 new Vue({
   vuetify: new Vuetify(),
   render: h => h(App),
