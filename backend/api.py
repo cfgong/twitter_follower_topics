@@ -8,16 +8,18 @@ import numpy as np
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
-# Require a parser to parse our POST request.
-parser = reqparse.RequestParser()
-parser.add_argument("twitter_handle")
 
-class Predict(Resource):
-  def post(self):
-    args = parser.parse_args()
-    _y = args["twitter_handle"] * 2
-    return {"class": _y}
+@app.route("/")
+def hello():
+    return "ok"
 
-api.add_resource(Predict, "/predict")
+@app.route("/predict", methods=['POST'])
+def action ():
+    user=request.values.get("twitter_handle")
+
+    print("RESULT in api", user)
+    # users.insert_one({ "user":user})
+    return "ok"
+
 if __name__ == "__main__":
   app.run(debug=True)
