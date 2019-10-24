@@ -1,6 +1,6 @@
 # ./python_code/api.py
 import os
-from flask import Flask
+from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
 import numpy as np
