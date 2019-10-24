@@ -12,7 +12,3 @@ twitter = Twython(
     access_token,
     access_token_secret
 )
-
-message = "Hello World Again!"
-twitter.update_status(status=message)
-print("Tweeted: " + message)
