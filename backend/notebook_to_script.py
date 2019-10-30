@@ -1,21 +1,12 @@
-try:
-    from pip import main as pipmain
-except:
-    from pip._internal import main as pipmain
-
-packages = ['twython', 'nltk']
-pipmain(['install'] + packages)
-
+import random
+import re
+import nltk
 from twython import Twython
-
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
-import nltk
+
 nltk.download('stopwords')
 nltk.download('punkt')
-
-import re
-import random
 
 from auth import (
     consumer_key,
@@ -58,9 +49,9 @@ def get_tweet_data(results):
         tweet_hashtags = []
         tweet_urls = []
         tweet_user_mentions = []
-        
+
         entities = tweet['entities']
-    
+
         for hashtags in entities['hashtags']:
             tweet_hashtags.append(hashtags['text'])
         for urls in entities['urls']:
@@ -72,17 +63,17 @@ def get_tweet_data(results):
             pass
         for users in entities['user_mentions']:
             tweet_user_mentions.append(users['screen_name'])
-            
+
         tweet_map["hashtags"] = tweet_hashtags
         tweet_map["urls"] = tweet_urls
         tweet_map["user_mentions"] = tweet_user_mentions
         tweets.append(tweet_map)
-        
+
     return tweets
 
 
 def get_tweets_data_from(user_id, results):
-    try: 
+    try:
         result = twitter.get_user_timeline(user_id = user_id)
         results.extend(result)
         return get_tweet_data(result), results
@@ -93,7 +84,7 @@ def get_tweets_data_from(user_id, results):
 def get_tweets_data_and_results(user_ids):
     tweets_data = []
     results = []
-    
+
     samples = user_ids
     if len(user_ids) > FOLLOWER_SAMPLE_LIMIT:
         samples = random.sample(user_ids, FOLLOWER_SAMPLE_LIMIT)
@@ -101,22 +92,22 @@ def get_tweets_data_and_results(user_ids):
     for f in samples:
         result, results = get_tweets_data_from(f, results)
         tweets_data.extend(result)
-            
+
     return tweets_data, results
 
 
-def word_extraction(tweet_dictionary, stopwords = STOPWORDS):  
+def word_extraction(tweet_dictionary, stopwords = STOPWORDS):
     sentence = tweet_dictionary['text']
     hashtags = ['#' + s for s in tweet_dictionary['hashtags']]
     urls = tweet_dictionary['urls']
     user_mentions = ['@' + s for s in tweet_dictionary['user_mentions']]
-    
+
     ignore = hashtags + urls + user_mentions
 
-    words = sentence.split()  
-    
+    words = sentence.split()
+
     cleaned_text = []
-    
+
     for word in words:
         cleaned_word = re.sub("[^\w]", "",  word)
         if (not word in ignore) and (not word.lower() in stopwords) and (word.isalpha()) and (len(cleaned_word) > 0):
@@ -124,12 +115,12 @@ def word_extraction(tweet_dictionary, stopwords = STOPWORDS):
     return cleaned_text
 
 
-def get_freq_map(my_list): 
-    freq = {} 
-    for item in my_list: 
-        if (item in freq): 
+def get_freq_map(my_list):
+    freq = {}
+    for item in my_list:
+        if (item in freq):
             freq[item] += 1
-        else: 
+        else:
             freq[item] = 1
     return freq
 
@@ -137,7 +128,7 @@ def get_freq_map(my_list):
 def get_top_freq(my_list, top_count):
     freq = get_freq_map(my_list)
     freq = sorted(freq.items(), key=lambda item: item[1], reverse = True)
-    
+
     if len(freq) <= top_count:
         return freq
     else:

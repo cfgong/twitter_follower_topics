@@ -2,6 +2,7 @@
 node_modules
 /dist
 .ipynb_checkpoints/
+*.Rhistory
 
 # local env files
 .env.local
