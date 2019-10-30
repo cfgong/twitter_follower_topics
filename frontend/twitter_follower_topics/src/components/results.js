@@ -8,6 +8,8 @@ import * as routes from '../constants/routes';
 import { 
   isEmpty, } from '../functions';
 
+import BarChart from './barchart';
+
 class ResultsPage extends Component {
 
   constructor(props){
@@ -22,10 +24,14 @@ class ResultsPage extends Component {
 
     }
 
+    const width = 700;
+    const height = 500;
+
     return (
       <div>
       RESULTSPAGE
       <Link to={routes.LANDING}>Back to home page</Link>
+      <BarChart width={width} height={height} />
       </div>
       );
   }
