@@ -172,7 +172,7 @@ def main():
     tweets_text_freq = get_top_freq(tweets_text, WORD_FREQ_LIMIT)
     tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)
 
-    return [{'token': t[0], 'count': t[1]} for t in tweets_text_freq]
+    return {'data': [{'token': t[0], 'count': t[1]} for t in tweets_text_freq]}
 
 
 if __name__ == "__main__":
