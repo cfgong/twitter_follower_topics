@@ -11,7 +11,9 @@ export function get_data(str){
       data: params
     })
     .then(function (response) {
-      console.log(response);
+      console.log("GOT RESPONSE FROM SERVER");
+      store.dispatch({ type: 'DATA_SET', payload: response["data"]["data"]})
+
     })
     .catch(function (error) {
       console.log(error);
