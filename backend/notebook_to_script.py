@@ -36,10 +36,10 @@ PRINT_LIMIT = 50
 FOLLOWER_SAMPLE_LIMIT = 20 # number of followers to randomly sample
 WORD_FREQ_LIMIT = 10 # return this number of topics that are most freq
 
-user = "AndrewYang"
-
-followers = twitter.get_followers_ids(screen_name = user)
-
+STOPWORDS = stopwords.words('english') + stopwords.words('spanish')
+# TODO: decide whether or not to remove tweets that are from retweets altogether
+more_stop_words = ['rt']
+STOPWORDS += more_stop_words
 
 # Printing twitter account IDs
 
@@ -103,13 +103,6 @@ def get_tweets_data_and_results(user_ids):
         tweets_data.extend(result)
             
     return tweets_data, results
-    
-tweets_data, results = get_tweets_data_and_results(followers['ids'])
-
-STOPWORDS = stopwords.words('english') + stopwords.words('spanish')
-# TODO: decide whether or not to remove tweets that are from retweets altogether
-more_stop_words = ['rt']
-STOPWORDS += more_stop_words
 
 
 def word_extraction(tweet_dictionary, stopwords = STOPWORDS):  
@@ -129,16 +122,6 @@ def word_extraction(tweet_dictionary, stopwords = STOPWORDS):
         if (not word in ignore) and (not word.lower() in stopwords) and (word.isalpha()) and (len(cleaned_word) > 0):
             cleaned_text.append(cleaned_word.lower())
     return cleaned_text
-
-
-tweets_text = []
-for tweet in tweets_data:
-    tweets_text.extend(word_extraction(tweet))
-
-
-tweets_hashtags = []
-for tweet in tweets_data:
-        tweets_hashtags.extend(tweet['hashtags'])
 
 
 def get_freq_map(my_list): 
@@ -161,9 +144,6 @@ def get_top_freq(my_list, top_count):
         return freq[:10]
 
 
-tweets_text_freq = get_top_freq(tweets_text, WORD_FREQ_LIMIT)
-tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)
-
 # import maptlotlib.pyplot as plt
 # def visualize_data(token_counts):
 #     tokens = [tup[0] for tup in token_counts]
@@ -174,5 +154,26 @@ tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)
 # visualize_data(tweets_text_freq)
 
 
-return [{'token': t[0], 'count': t[1]} for t in tweets_text_freq]
+def main():
+    user = "AndrewYang"
+    followers = twitter.get_followers_ids(screen_name = user)
 
+    tweets_data, results = get_tweets_data_and_results(followers['ids'])
+
+    tweets_text = []
+    for tweet in tweets_data:
+        tweets_text.extend(word_extraction(tweet))
+
+
+    tweets_hashtags = []
+    for tweet in tweets_data:
+            tweets_hashtags.extend(tweet['hashtags'])
+
+    tweets_text_freq = get_top_freq(tweets_text, WORD_FREQ_LIMIT)
+    tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)
+
+    return [{'token': t[0], 'count': t[1]} for t in tweets_text_freq]
+
+
+if __name__ == "__main__":
+    print(main())
