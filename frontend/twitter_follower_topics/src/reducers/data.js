@@ -4,7 +4,7 @@ const INITIAL_STATE = {
 
 const applySetData = (state, action) => ({
   ...state,
-  data: action.data
+  data: action.payload
 });
 
 function dataReducer(state = INITIAL_STATE, action) {
