@@ -4,6 +4,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
 import numpy as np
+from notebook_to_script import main
 
 app = Flask(__name__)
 CORS(app)
@@ -19,7 +20,7 @@ def action ():
 
     print("RESULT in api", user)
     # users.insert_one({ "user":user})
-    return "ok"
+    return main()
 
 if __name__ == "__main__":
   app.run(debug=True)
