@@ -161,9 +161,13 @@ def main():
             tweets_hashtags.extend(tweet['hashtags'])
 
     tweets_text_freq = get_top_freq(tweets_text, WORD_FREQ_LIMIT)
-    tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)
+    tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)    
 
-    return {'data': [{'token': t[0], 'count': t[1]} for t in tweets_text_freq]}
+    return {'labels': [t[0] for t in tweets_text_freqs],
+        'counts': [t[1] for t in tweets_text_freqs]}
+
+
+    # return {'data': [{'token': t[0], 'count': t[1]} for t in tweets_text_freq]}
 
 
 if __name__ == "__main__":
