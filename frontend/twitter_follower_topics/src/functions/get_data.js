@@ -12,7 +12,7 @@ export function get_data(str){
     })
     .then(function (response) {
       console.log("GOT RESPONSE FROM SERVER");
-      store.dispatch({ type: 'DATA_SET', payload: response["data"]["data"]})
+      store.dispatch({ type: 'DATA_SET', payload: response["data"]})
 
     })
     .catch(function (error) {

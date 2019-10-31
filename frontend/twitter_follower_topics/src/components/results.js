@@ -8,7 +8,7 @@ import * as routes from '../constants/routes';
 import { 
   isEmpty, } from '../functions';
 
-import BarChart from './barchart';
+import BarChart from './barchart.js';
 
 class ResultsPage extends Component {
 
@@ -29,7 +29,6 @@ class ResultsPage extends Component {
 
     return (
       <div>
-      RESULTSPAGE
       <Link to={routes.LANDING}>Back to home page</Link>
       <BarChart width={width} height={height} />
       </div>
