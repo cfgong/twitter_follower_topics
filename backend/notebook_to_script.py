@@ -165,12 +165,12 @@ def main(user='adfjaoweifjaoi'):
     tweets_text_freq = get_top_freq(tweets_text, WORD_FREQ_LIMIT)
     tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)    
 
-    print(tweets_hashtags_freq)
+    # print(tweets_hashtags_freq)
 
-    # return {'token_labels': [t[0] for t in tweets_text_freqs],
-    #     'token_counts': [t[1] for t in tweets_text_freqs]},
-    #     {'labels': [t[0] for t in tweets_hashtags_freq],
-    #     'counts': [t[1] for t in tweets_hashtags_freq]},
+    return {'token_labels': [t[0] for t in tweets_text_freq],
+        'token_counts': [t[1] for t in tweets_text_freq]},
+        {'labels': [t[0] for t in tweets_hashtags_freq],
+        'counts': [t[1] for t in tweets_hashtags_freq]},
 
 
 
