@@ -8,7 +8,7 @@ import * as routes from '../constants/routes';
 import { 
   isEmpty, } from '../functions';
 
-import BarChart from './barchart.js';
+import BarChart from './barchart';
 
 class ResultsPage extends Component {
 
@@ -18,19 +18,10 @@ class ResultsPage extends Component {
 
   render() {
 
-    if(!isEmpty(this.props.data)){
-      console.log("PROPS GOT DATA");
-      console.log(this.props.data);
-
-    }
-
-    const width = 700;
-    const height = 500;
-
     return (
       <div>
       <Link to={routes.LANDING}>Back to home page</Link>
-      <BarChart width={width} height={height} />
+      <BarChart />
       </div>
       );
   }
