@@ -21,7 +21,8 @@ class ResultsPage extends Component {
     return (
       <div>
       <Link to={routes.LANDING}>Back to home page</Link>
-      <BarChart />
+      <BarChart counts={this.props.data["hash_counts"]} labels={this.props.data["hash_labels"]}/>
+      <BarChart counts={this.props.data["token_counts"]} labels={this.props.data["token_labels"]}/>
       </div>
       );
   }

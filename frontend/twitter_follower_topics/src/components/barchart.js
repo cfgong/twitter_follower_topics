@@ -18,8 +18,8 @@ class BarChart extends Component {
   drawChart() {
 
   	if(!isEmpty(this.props.data)){
-        const count = this.props.data["counts"];
-        const labels = this.props.data["labels"];
+        const count = this.props.counts;
+        const labels = this.props.labels;
 
         var data = []
         for(var i = 0; i < count.length; i++){
@@ -67,7 +67,7 @@ class BarChart extends Component {
   }
 
   render() {
-    
+
     this.drawChart();
     return (
     	<div>

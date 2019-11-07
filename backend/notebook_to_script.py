@@ -145,11 +145,11 @@ def get_top_freq(my_list, top_count):
 # visualize_data(tweets_text_freq)
 
 
-def main(user='adfjaoweifjaoi'):
-    try:
-        followers = twitter.get_followers_ids(screen_name = user)
-    except:
-        return -1
+def main(user='realDonaldTrump'):
+    # try:
+    followers = twitter.get_followers_ids(screen_name = user)
+    # except:
+    #     return -1
 
     tweets_data, results = get_tweets_data_and_results(followers['ids'])
 
@@ -165,16 +165,24 @@ def main(user='adfjaoweifjaoi'):
     tweets_text_freq = get_top_freq(tweets_text, WORD_FREQ_LIMIT)
     tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)    
 
-    # print(tweets_hashtags_freq)
-
     return {'token_labels': [t[0] for t in tweets_text_freq],
-        'token_counts': [t[1] for t in tweets_text_freq]},
-        {'labels': [t[0] for t in tweets_hashtags_freq],
-        'counts': [t[1] for t in tweets_hashtags_freq]},
+        'token_counts': [t[1] for t in tweets_text_freq],
+        'hash_labels': [t[0] for t in tweets_hashtags_freq],
+        'hash_counts': [t[1] for t in tweets_hashtags_freq]}
+
+    # all_values = []
+
+    # for i in range(len(tweets_text_freq)):
+    #     all_values.extend([{'token_labels': tweets_text_freq[i][0], 'token_counts': tweets_text_freq[i][1],
+    #         'hash_labels': tweets_hashtags_freq[i][0], 'hash_counts': tweets_hashtags_freq[i][1]}])
 
 
+    # return {'data': all_values}
 
-    # return {'data': [{'token': t[0], 'count': t[1]} for t in tweets_text_freq]}
+    # token_labels = []
+
+
+    # return {'data': [{'token_labels': t[0], 'token_counts': t[1]} for t in tweets_text_freq]} 
 
 
 if __name__ == "__main__":

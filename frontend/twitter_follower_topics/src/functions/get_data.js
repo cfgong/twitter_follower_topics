@@ -14,6 +14,6 @@ export function get_data(str){
       store.dispatch({ type: 'DATA_SET', payload: response["data"]})
     })
     .catch(function (error) {
-      console.log(error);
+      console.log("Twitter user does not exist");
     });
   }
