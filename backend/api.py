@@ -1,6 +1,6 @@
 # ./python_code/api.py
 import os
-from flask import Flask, request
+from flask import Flask, request, abort
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
 import numpy as np
@@ -20,7 +20,9 @@ def action ():
 
     print("RESULT in api", user)
     # users.insert_one({ "user":user})
-    return main()
+    output = main(user)
+    if output == -1:
+    	return abort(400, 'User Not Found')
 
 if __name__ == "__main__":
   app.run(debug=True)

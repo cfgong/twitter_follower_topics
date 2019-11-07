@@ -24,7 +24,7 @@ twitter = Twython(
 
 
 PRINT_LIMIT = 50
-FOLLOWER_SAMPLE_LIMIT = 20 # number of followers to randomly sample
+FOLLOWER_SAMPLE_LIMIT = 20 # number of followers to randomly sample (500)
 WORD_FREQ_LIMIT = 10 # return this number of topics that are most freq
 
 STOPWORDS = stopwords.words('english') + stopwords.words('spanish')
@@ -132,7 +132,7 @@ def get_top_freq(my_list, top_count):
     if len(freq) <= top_count:
         return freq
     else:
-        return freq[:10]
+        return freq[:top_count]
 
 
 # import maptlotlib.pyplot as plt
@@ -140,14 +140,16 @@ def get_top_freq(my_list, top_count):
 #     tokens = [tup[0] for tup in token_counts]
 #     counts = [tup[1] for tup in token_counts]
 #     plt.bar(range(len(tokens)), height=counts, tick_label=tokens)
-#     plt.show()
+#     plt.savefig()
 
 # visualize_data(tweets_text_freq)
 
 
-def main():
-    user = "AndrewYang"
-    followers = twitter.get_followers_ids(screen_name = user)
+def main(user='adfjaoweifjaoi'):
+    try:
+        followers = twitter.get_followers_ids(screen_name = user)
+    except:
+        return -1
 
     tweets_data, results = get_tweets_data_and_results(followers['ids'])
 
@@ -163,8 +165,13 @@ def main():
     tweets_text_freq = get_top_freq(tweets_text, WORD_FREQ_LIMIT)
     tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)    
 
-    return {'labels': [t[0] for t in tweets_text_freqs],
-        'counts': [t[1] for t in tweets_text_freqs]}
+    # print(tweets_hashtags_freq)
+
+    return {'token_labels': [t[0] for t in tweets_text_freq],
+        'token_counts': [t[1] for t in tweets_text_freq]},
+        {'labels': [t[0] for t in tweets_hashtags_freq],
+        'counts': [t[1] for t in tweets_hashtags_freq]},
+
 
 
     # return {'data': [{'token': t[0], 'count': t[1]} for t in tweets_text_freq]}
