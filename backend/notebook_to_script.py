@@ -3,7 +3,8 @@ import re
 import nltk
 from twython import Twython
 from nltk.tokenize import sent_tokenize, word_tokenize
-from nltk.corpus import stopwords
+from nltk.corpus import stopwords, words as nltk_english_words
+# use nltk words to filter for only english words
 
 nltk.download('stopwords')
 nltk.download('punkt')
@@ -26,11 +27,18 @@ twitter = Twython(
 PRINT_LIMIT = 50
 FOLLOWER_SAMPLE_LIMIT = 20 # number of followers to randomly sample (500)
 WORD_FREQ_LIMIT = 10 # return this number of topics that are most freq
+MIN_WORD_LEN = 1
 
 STOPWORDS = stopwords.words('english') + stopwords.words('spanish')
 # TODO: decide whether or not to remove tweets that are from retweets altogether
 more_stop_words = ['rt']
 STOPWORDS += more_stop_words
+
+with open('top1000.txt', 'r') as f:
+    mostFreqWords = [line.strip() for line in f]
+
+STOPWORDS += mostFreqWords
+STOPWORDS = set(STOPWORDS)
 
 # Printing twitter account IDs
 
@@ -110,7 +118,10 @@ def word_extraction(tweet_dictionary, stopwords = STOPWORDS):
 
     for word in words:
         cleaned_word = re.sub("[^\w]", "",  word)
-        if (not word in ignore) and (not word.lower() in stopwords) and (word.isalpha()) and (len(cleaned_word) > 0):
+        if (word in nltk_english_words.words()) and \
+        (not word in ignore) and \
+        (not word.lower() in stopwords) and \
+        (word.isalpha()) and (len(cleaned_word) > MIN_WORD_LEN):
             cleaned_text.append(cleaned_word.lower())
     return cleaned_text
 
@@ -163,7 +174,7 @@ def main(user='realDonaldTrump'):
             tweets_hashtags.extend(tweet['hashtags'])
 
     tweets_text_freq = get_top_freq(tweets_text, WORD_FREQ_LIMIT)
-    tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)    
+    tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)
 
     return {'token_labels': [t[0] for t in tweets_text_freq],
         'token_counts': [t[1] for t in tweets_text_freq],
@@ -182,7 +193,7 @@ def main(user='realDonaldTrump'):
     # token_labels = []
 
 
-    # return {'data': [{'token_labels': t[0], 'token_counts': t[1]} for t in tweets_text_freq]} 
+    # return {'data': [{'token_labels': t[0], 'token_counts': t[1]} for t in tweets_text_freq]}
 
 
 if __name__ == "__main__":
