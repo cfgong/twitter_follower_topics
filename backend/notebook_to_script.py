@@ -3,7 +3,7 @@ import re
 import nltk
 from twython import Twython
 from nltk.tokenize import sent_tokenize, word_tokenize
-from nltk.corpus import stopwords, words as nltk_english_words
+from nltk.corpus import stopwords
 # use nltk words to filter for only english words
 
 nltk.download('stopwords')
@@ -118,8 +118,7 @@ def word_extraction(tweet_dictionary, stopwords = STOPWORDS):
 
     for word in words:
         cleaned_word = re.sub("[^\w]", "",  word)
-        if (word in nltk_english_words.words()) and \
-        (not word in ignore) and \
+        if (not word in ignore) and \
         (not word.lower() in stopwords) and \
         (word.isalpha()) and (len(cleaned_word) > MIN_WORD_LEN):
             cleaned_text.append(cleaned_word.lower())
