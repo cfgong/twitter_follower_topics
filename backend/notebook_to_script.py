@@ -9,7 +9,7 @@ from nltk.corpus import stopwords
 nltk.download('stopwords')
 nltk.download('punkt')
 
-from auth import (
+from auth2 import (
     consumer_key,
     consumer_secret,
     access_token,
@@ -25,9 +25,9 @@ twitter = Twython(
 
 
 PRINT_LIMIT = 50
-FOLLOWER_SAMPLE_LIMIT = 20 # number of followers to randomly sample (500)
+FOLLOWER_SAMPLE_LIMIT = 10 # number of followers to randomly sample (500)
 WORD_FREQ_LIMIT = 10 # return this number of topics that are most freq
-MIN_WORD_LEN = 1
+MIN_WORD_LEN = 3
 
 STOPWORDS = stopwords.words('english') + stopwords.words('spanish')
 # TODO: decide whether or not to remove tweets that are from retweets altogether
@@ -49,6 +49,13 @@ STOPWORDS = set(STOPWORDS)
 #     if limit >= PRINT_LIMIT:
 #         break
 
+def isEnglish(s):
+    try:
+        s.encode(encoding='utf-8').decode('ascii')
+    except UnicodeDecodeError:
+        return False
+    else:
+        return True
 
 def get_tweet_data(results):
     tweets = []
@@ -104,7 +111,7 @@ def get_tweets_data_and_results(user_ids):
     return tweets_data, results
 
 
-def word_extraction(tweet_dictionary, stopwords = STOPWORDS):
+def word_extraction_tweet(tweet_dictionary, stopwords = STOPWORDS):
     sentence = tweet_dictionary['text']
     hashtags = ['#' + s for s in tweet_dictionary['hashtags']]
     urls = tweet_dictionary['urls']
@@ -118,10 +125,19 @@ def word_extraction(tweet_dictionary, stopwords = STOPWORDS):
 
     for word in words:
         cleaned_word = re.sub("[^\w]", "",  word)
-        if (not word in ignore) and \
+        if (isEnglish(word)) and \
+        (not word in ignore) and \
         (not word.lower() in stopwords) and \
-        (word.isalpha()) and (len(cleaned_word) > MIN_WORD_LEN):
+        (word.isalpha()) and (len(cleaned_word) >= MIN_WORD_LEN):
             cleaned_text.append(cleaned_word.lower())
+    return cleaned_text
+
+def word_extraction_hashtag(tweet_dictionary, stopwords = STOPWORDS):
+    hashtags = tweet_dictionary['hashtags']
+    cleaned_text = []
+    for tag in hashtags:
+        if (isEnglish(tag)):
+            cleaned_text.append(tag)
     return cleaned_text
 
 
@@ -165,12 +181,12 @@ def main(user='realDonaldTrump'):
 
     tweets_text = []
     for tweet in tweets_data:
-        tweets_text.extend(word_extraction(tweet))
+        tweets_text.extend(word_extraction_tweet(tweet))
 
 
     tweets_hashtags = []
     for tweet in tweets_data:
-            tweets_hashtags.extend(tweet['hashtags'])
+            tweets_hashtags.extend(word_extraction_hashtag(tweet))
 
     tweets_text_freq = get_top_freq(tweets_text, WORD_FREQ_LIMIT)
     tweets_hashtags_freq = get_top_freq(tweets_hashtags, WORD_FREQ_LIMIT)
