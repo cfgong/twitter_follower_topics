@@ -28,3 +28,4 @@ yarn-error.log*
 *auth.py
 *auth2.py
 *aws.py
+*topic-tracker-*-firebase-adminsdk-*.json
