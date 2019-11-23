@@ -27,3 +27,4 @@ yarn-error.log*
 # Credentials
 *auth.py
 *auth2.py
+*aws.py
