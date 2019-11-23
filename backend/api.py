@@ -18,10 +18,11 @@ def hello():
 def action ():
 	user=request.values.get("twitter_handle")
 
-	print("RESULT in api", user)
-	# users.insert_one({ "user":user})
+	print("Requested user", user)
+
 	output = main(user)
 	print(output)
+    
 	if output == -1:
 		return abort(400, 'User Not Found')
 	return output
