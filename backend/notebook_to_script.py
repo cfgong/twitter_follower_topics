@@ -4,21 +4,28 @@ import nltk
 from twython import Twython
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
+# use nltk words to filter for only english words
+
 nltk.download('stopwords')
 nltk.download('punkt')
-import psycopg2
-import pandas as pd
 
-from auth2 import consumer_key, consumer_secret, access_token, access_token_secret
-from aws import host, port, user, password, database
+from auth2 import (
+    consumer_key,
+    consumer_secret,
+    access_token,
+    access_token_secret
+)
 
-connection = psycopg2.connect(host = host, port = port, user = user, password = password, dbname = database)
-cursor=connection.cursor()
+twitter = Twython(
+    consumer_key,
+    consumer_secret,
+    access_token,
+    access_token_secret
+)
 
-twitter = Twython(consumer_key, consumer_secret, access_token, access_token_secret)
 
-PRINT_LIMIT = 10
-FOLLOWER_SAMPLE_LIMIT = 2 # number of followers to randomly sample (500)
+PRINT_LIMIT = 50
+FOLLOWER_SAMPLE_LIMIT = 10 # number of followers to randomly sample (500)
 WORD_FREQ_LIMIT = 10 # return this number of topics that are most freq
 MIN_WORD_LEN = 3
 
@@ -163,100 +170,15 @@ def get_top_freq(my_list, top_count):
 
 # visualize_data(tweets_text_freq)
 
-# methods for writing and reading to database
-def read_try(sql):
-    try:
-        df = pd.read_sql(sql, con=connection)
-        return pd.DataFrame() if df.empty else df
-    except Exception as e:
-        print("READ ERROR", e)
-        return pd.DataFrame()
-
-def write_try(sql):
-    try:
-        cursor.execute(sql)  # run a psql command
-        connection.commit()  # commit to db
-        return True
-    except Exception as e:
-        print("WRITE ERROR: ", e)
-        return False
-
-def read_user_from_db(user):
-    sql = 'SELECT * FROM users WHERE user_handle = \'{}\''.format(user)
-    return read_try(sql)
-
-# get list of followers for a user
-def read_user_followers_from_db(user):
-    sql = 'SELECT follower_handle FROM followers WHERE user_handle = \'{}\''.format(user)
-    return read_try(sql)
-
-# get list of word counts for a user
-def read_user_words_from_db(user, date = ''):
-    sql = ('SELECT word, SUM(count) as sum_count FROM followers '
-    'JOIN tweets ON tweets.follower_handle = followers.follower_handle '
-    'JOIN words ON words.tweet_id = tweets.tweet_id '
-    'WHERE followers.user_handle = \'{}\' GROUP BY word ORDER BY sum_count desc'.format(user)
-    )
-    return read_try(sql)
-
-# get list of words for a user
-def read_user_hashtags_from_db(user, date = ''):
-    sql = ('SELECT word, SUM(count) as sum_count FROM followers '
-    'JOIN tweets ON tweets.follower_handle = followers.follower_handle '
-    'JOIN hashtags ON hashtags.tweet_id = tweets.tweet_id '
-    'WHERE followers.user_handle = \'{}\' GROUP BY word ORDER BY sum_count desc'.format(user)
-    )
-    return read_try(sql)
-
-def write_user_to_db(user):
-    sql = 'INSERT INTO users VALUES (\'{}\');'.format(user)
-    write_try(sql)
-
-def write_user_followers_to_db(followers, user):
-    for follower in followers:
-        sql = 'INSERT INTO followers VALUES (\'{}\', \'{}\');'.format(follower, user)
-        write_try(sql)
-
-def write_follower_tweets_words_hashtags_to_db(follower, tweets):
-    for tweet in tweets:
-        tweet_id = tweet['id']
-        tweet_date = tweet['created_at']
-        sql = 'INSERT INTO tweets VALUES ({},\'{}\',\'{}\');'.format(tweet_id, follower, tweet_date)
-        # if writing tweet to database was sucessful, then we need to get write word count info
-        if write_try(sql):
-            # calculate word and hashtag count of the tweet and insert that into database
-            '''
-            words = ...
-            word_counts = ...
-            for word, wcount in words, word_counts:
-                sql2 = 'INSERT INTO words VALUES ({},\'{}\',{});'.format(tweet_id, word, wcount)
-                word_try(sql2)
-
-            hashtags = ...
-            hashtag_counts = ...
-            for hashtag, hcount in hashtags, hashtag_counts:
-                sql2 = 'INSERT INTO words VALUES ({},\'{}\',{});'.format(tweet_id, hashtag, hcount)
-                word_try(sql2)
-            '''
-            pass
-
 
 def main(user='realDonaldTrump'):
-    followers = []
-    try:
-        followers = twitter.get_followers_ids(screen_name = user)
-    except:
-        return -1
-
-    # make sure user is in users db
-    was_user_in_db = not read_user_from_db(user).empty
-    if not was_user_in_db:
-        write_user_to_db(user)
+    # try:
+    followers = twitter.get_followers_ids(screen_name = user)
+    # except:
+    #     return -1
 
     tweets_data, results = get_tweets_data_and_results(followers['ids'])
-    print(tweets_data)
-    print(results)
-    exit()
+
     tweets_text = []
     for tweet in tweets_data:
         tweets_text.extend(word_extraction_tweet(tweet))
@@ -273,6 +195,20 @@ def main(user='realDonaldTrump'):
         'token_counts': [t[1] for t in tweets_text_freq],
         'hash_labels': [t[0] for t in tweets_hashtags_freq],
         'hash_counts': [t[1] for t in tweets_hashtags_freq]}
+
+    # all_values = []
+
+    # for i in range(len(tweets_text_freq)):
+    #     all_values.extend([{'token_labels': tweets_text_freq[i][0], 'token_counts': tweets_text_freq[i][1],
+    #         'hash_labels': tweets_hashtags_freq[i][0], 'hash_counts': tweets_hashtags_freq[i][1]}])
+
+
+    # return {'data': all_values}
+
+    # token_labels = []
+
+
+    # return {'data': [{'token_labels': t[0], 'token_counts': t[1]} for t in tweets_text_freq]}
 
 
 if __name__ == "__main__":
