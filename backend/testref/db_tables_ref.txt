@@ -62,3 +62,8 @@ ALTER TABLE hashtags ALTER COLUMN tweet_id TYPE BIGINT;
 
 describe table:
 \d tweets
+
+ALTER TABLE words ADD COLUMN word_type integer;
+
+SET lock_timeout TO '2s'
+ALTER TABLE items ADD COLUMN last_update timestamptz;
