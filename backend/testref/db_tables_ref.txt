@@ -1,0 +1,70 @@
+CREATE TABLE users(
+  user_handle VARCHAR(15) PRIMARY KEY
+);
+
+CREATE TABLE followers(
+  follower_handle VARCHAR(15) NOT NULL,
+  user_handle VARCHAR(15) NOT NULL,
+  PRIMARY KEY (follower_handle, user_handle),
+  CONSTRAINT followers_user_handle_fkey FOREIGN KEY (user_handle)
+      REFERENCES users (user_handle) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+CREATE TABLE tweets(
+  tweet_id integer PRIMARY KEY,
+  follower_handle VARCHAR(15) NOT NULL,
+  tweet_date timestamp without time zone
+);
+
+CREATE TABLE words(
+  tweet_id integer NOT NULL,
+  word VARCHAR(280) NOT NULL,
+  count integer NOT NULL,
+  CONSTRAINT words_tweet_id_fkey FOREIGN KEY (tweet_id)
+      REFERENCES tweets (tweet_id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+CREATE TABLE hashtags (like words including all);
+
+list tables: \dt
+
+INSERT INTO users VALUES ('test_user');
+INSERT INTO followers VALUES
+  ('test_follower1', 'test_user'),
+  ('test_follower2', 'test_user');
+INSERT INTO tweets VALUES
+  (0, 'test_follower1', '1977-01-08 04:05:06'),
+  (1, 'test_follower1', '1999-01-08 04:05:06');
+INSERT INTO words VALUES
+  (0, 'apple', 17),
+  (0, 'cheese', 45),
+  (0, 'thankyou', 3),
+  (1, 'lovely', 2)
+  (1, 'cheese', 5);
+INSERT INTO users VALUES ('test_user1');
+INSERT INTO followers VALUES
+  ('test_follower1', 'test_user1');
+
+SELECT word, SUM(count) as sum_count FROM followers
+JOIN tweets ON tweets.follower_handle = followers.follower_handle
+JOIN words ON words.tweet_id = tweets.tweet_id
+WHERE followers.user_handle = 'test_user1'
+GROUP BY word
+ORDER BY sum_count desc;
+
+ALTER TABLE words
+ADD CONSTRAINT unique_tweet_word_count UNIQUE (tweet_id, word, count);
+
+ALTER TABLE tweets ALTER COLUMN tweet_id TYPE BIGINT;
+ALTER TABLE words ALTER COLUMN tweet_id TYPE BIGINT;
+ALTER TABLE hashtags ALTER COLUMN tweet_id TYPE BIGINT;
+
+describe table:
+\d tweets
+
+select * from pg_locks where
+    not granted and relation = 'words'::regclass \x\g\x
+
+choose database:
+\c topictracker

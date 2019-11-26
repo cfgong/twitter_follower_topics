@@ -4,7 +4,8 @@ from flask import Flask, request, abort
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
 import numpy as np
-from notebook_to_script import main
+#from notebook_to_script import main
+from get_tweet_data import main as get_tweet_data_from_user
 
 app = Flask(__name__)
 CORS(app)
@@ -16,15 +17,19 @@ def hello():
 
 @app.route("/predict", methods=['POST'])
 def action ():
-	user=request.values.get("twitter_handle")
+    user=request.values.get("twitter_handle")
 
-	print("RESULT in api", user)
-	# users.insert_one({ "user":user})
-	output = main(user)
-	print(output)
-	if output == -1:
-		return abort(400, 'User Not Found')
-	return output
+    print("Requested user", user)
+
+    # output = main(user)
+    output = get_tweet_data_from_user(user, True)
+    # change to second parameter to False to get updated results
+    print(output)
+
+    if output == -1:
+        return abort(400, 'User Not Found')
+
+    return output
 
 if __name__ == "__main__":
   app.run(debug=True)

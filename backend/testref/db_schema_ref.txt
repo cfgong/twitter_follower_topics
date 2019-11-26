@@ -1,0 +1,60 @@
+List of relations
+Schema |   Name    | Type  |  Owner
+--------+-----------+-------+----------
+public | followers | table | postgres
+public | hashtags  | table | postgres
+public | tweets    | table | postgres
+public | users     | table | postgres
+public | words     | table | postgres
+(5 rows)
+
+Table "public.users"
+Column    |         Type          | Collation | Nullable | Default
+-------------+-----------------------+-----------+----------+---------
+user_handle | character varying(15) |           | not null |
+Indexes:
+"users_pkey" PRIMARY KEY, btree (user_handle)
+Referenced by:
+TABLE "followers" CONSTRAINT "followers_user_handle_fkey" FOREIGN KEY (user_handle) REFERENCES users(user_handle)
+
+Table "public.followers"
+Column      |         Type          | Collation | Nullable | Default
+-----------------+-----------------------+-----------+----------+---------
+follower_handle | character varying(15) |           | not null |
+user_handle     | character varying(15) |           | not null |
+Indexes:
+"followers_pkey" PRIMARY KEY, btree (follower_handle, user_handle)
+Foreign-key constraints:
+"followers_user_handle_fkey" FOREIGN KEY (user_handle) REFERENCES users(user_handle)
+
+Table "public.tweets"
+Column      |            Type             | Collation | Nullable | Default
+-----------------+-----------------------------+-----------+----------+---------
+tweet_id        | bigint                      |           | not null |
+follower_handle | character varying(15)       |           | not null |
+tweet_date      | timestamp without time zone |           |          |
+Indexes:
+"tweets_pkey" PRIMARY KEY, btree (tweet_id)
+Referenced by:
+TABLE "words" CONSTRAINT "words_tweet_id_fkey" FOREIGN KEY (tweet_id) REFERENCES tweets(tweet_id)
+
+Table "public.words"
+Column   |          Type          | Collation | Nullable | Default
+-----------+------------------------+-----------+----------+---------
+tweet_id  | bigint                 |           | not null |
+word      | character varying(280) |           | not null |
+count     | integer                |           | not null |
+word_type | integer                |           |          |
+Indexes:
+"unique_tweet_word_count" UNIQUE CONSTRAINT, btree (tweet_id, word, count)
+Foreign-key constraints:
+"words_tweet_id_fkey" FOREIGN KEY (tweet_id) REFERENCES tweets(tweet_id)
+
+Table "public.hashtags"
+Column  |          Type          | Collation | Nullable | Default
+----------+------------------------+-----------+----------+---------
+tweet_id | bigint                 |           | not null |
+word     | character varying(280) |           | not null |
+count    | integer                |           | not null |
+Indexes:
+"hashtags_tweet_id_word_count_key" UNIQUE CONSTRAINT, btree (tweet_id, word, count)
