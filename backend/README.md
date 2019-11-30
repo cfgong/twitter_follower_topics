@@ -1,12 +1,16 @@
 # setup
 - install dependencies
 ```
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 - put access token credentials are in auth.py
 - to run flask server:
 ```
 python3 api.py
+```
+- run with debugging:
+```
+python3 api.py runserver -d
 ```
 - to test input to flask server:
 ```
@@ -29,3 +33,4 @@ source env/bin/activate
 # references
 - [How to Create a Simple Frontend, API, and Model with Python + Vue.js](https://medium.com/uptake-tech/how-to-create-a-simple-frontend-api-and-model-with-python-vue-js-a51841c66f8a)
 - [Better Python dependency while packaging your project](https://medium.com/python-pandemonium/better-python-dependency-and-package-management-b5d8ea29dff1)
+- [Solve Cross Origin Resource Sharing with Flask](https://stackoverflow.com/questions/26980713/solve-cross-origin-resource-sharing-with-flask)
