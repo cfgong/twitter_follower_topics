@@ -12,8 +12,7 @@ import twint
 import pandas as pd
 import datetime
 
-# import nest_asyncio
-# nest_asyncio.apply()
+import asyncio
 
 from auth import consumer_key, consumer_secret, access_token, access_token_secret
 from aws import host as ahost, port as aport, user as auser, password as apassword, database as adatabase
@@ -26,7 +25,7 @@ connection = psycopg2.connect(host = ahost,
                               dbname = adatabase)
 cursor = connection.cursor()
 
-FOLLOWERS_LIMIT = 10 # number of followers to randomly sample
+FOLLOWERS_LIMIT = 5 # number of followers to randomly sample
 MIN_WORD_LEN = 3
 TWEETS_LIMIT = 10
 WORD_FREQ_LIMIT = 15 # return this number of topics that are most freq
@@ -78,7 +77,7 @@ def read_all_hashtags_from_db():
     return read_try(sql)
 
 def read_user_from_db(user):
-    sql = 'SELECT * FROM users WHERE user_handle = \'{}\''.format(user)
+    sql = 'SELECT * FROM users WHERE LOWER(user_handle) = LOWER(\'{}\')'.format(user)
     return read_try(sql)
 
 # get list of followers for a user
@@ -245,6 +244,7 @@ def populate():
 # TODO: add date filtering (filter tweets by date)
 # change "only_get_info_from_db" to True in demo
 def main(user='realDonaldTrump', only_get_info_from_db = True):
+    asyncio.set_event_loop(asyncio.new_event_loop())
     # make sure user exists
     try:
         twitter.show_user(screen_name=user)
@@ -253,7 +253,14 @@ def main(user='realDonaldTrump', only_get_info_from_db = True):
 
     # pull more info and write to db
     # if we get only info flag is False or user not already in db
-    if not only_get_info_from_db or read_user_from_db(user).empty:
+    username_df = read_user_from_db(user)
+    if not username_df.empty:
+        user = username_df['user_handle'].iloc[0]
+        print("getting user {}".format(user)) #debug
+    if not only_get_info_from_db or username_df.empty:
+        print("getting new followers of {}".format(user)) #debug
+        # make sure user exists in db
+        write_user_to_db(user)
         followers = get_followers_list(user, limit = FOLLOWERS_LIMIT)
         # write user followers to db
         write_user_followers_to_db(followers, user)
