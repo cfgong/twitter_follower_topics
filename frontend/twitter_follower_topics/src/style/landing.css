@@ -1,2 +1,25 @@
+body {
+	background-color: beige;
+	font-family: Georgia, serif;
+}
+
+h1, p, form {
+	text-align: center;
+}
+
+p {
+	margin-right: 5%;
+	margin-left: 5%;
+}
+
+input[type=text] {
+	width: 112px;
+	height: 15px;
+}
+
+link {
+	text-align: center;
+}
+
 
 

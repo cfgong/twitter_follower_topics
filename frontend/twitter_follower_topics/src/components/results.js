@@ -8,6 +8,8 @@ import * as routes from '../constants/routes';
 import { 
   isEmpty, } from '../functions';
 
+import '../style/landing.css';
+
 import BarChart from './barchart';
 
 class ResultsPage extends Component {
@@ -19,11 +21,15 @@ class ResultsPage extends Component {
   render() {
 
     return (
-      <div>
-      <Link to={routes.LANDING}>Back to home page</Link>
+      <>
+      <h1>TopicTracker</h1>
+      <p>Below are two histrograms with 15 of the most used hashtags and words (topics) for followers of </p>
+      
       <BarChart counts={this.props.data["hash_counts"]} labels={this.props.data["hash_labels"]}/>
       <BarChart counts={this.props.data["token_counts"]} labels={this.props.data["token_labels"]}/>
-      </div>
+
+      <p><Link to={routes.LANDING}>Back to home page</Link></p>
+      </>
       );
   }
 }

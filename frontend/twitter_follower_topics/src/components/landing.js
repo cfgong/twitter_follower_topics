@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Route, Link, BrowserRouter as Router, withRouter } from 'react-router-dom'
 import { 
   get_data, } from '../functions';
+import '../style/landing.css';
 
 import { connect } from 'react-redux'
 import { compose } from 'redux';
@@ -30,10 +31,14 @@ class LandingPage extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input type="text" value={this.state.search} className="searchbar" placeholder="Search" onChange={this.handleChange} />
-        <input type="submit" value="Submit" />
-      </form>
+        <>
+        <h1>TopicTracker</h1>
+        <p>Welcome! TopicTracker is a tool to determine key topics that supporters of political candidates are interested in and care about. Enter a political candidate's Twitter handle below (without the @). The output is two histograms with the most relevant topics followers of that candidate care about. Try it out!</p>
+        <form onSubmit={this.handleSubmit}>
+          <input type="text" value={this.state.search} className="searchbar" placeholder="Enter a Twitter Handle" onChange={this.handleChange} />
+          <input type="submit" value="Submit" />
+        </form>
+        </>
       );
   }
 }

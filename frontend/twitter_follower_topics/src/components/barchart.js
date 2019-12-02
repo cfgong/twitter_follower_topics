@@ -27,7 +27,7 @@ class BarChart extends Component {
         }
 
         var margin = {top: 20, right: 20, bottom: 30, left: 40},
-        width = 960 - margin.left - margin.right,
+        width = 1200 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
         var svg = d3.select("body").append("svg")
@@ -71,7 +71,6 @@ class BarChart extends Component {
     this.drawChart();
     return (
     	<div>
-    	<svg></svg>
     	</div>
     	);
   }
