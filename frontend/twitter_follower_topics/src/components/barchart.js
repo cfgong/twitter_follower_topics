@@ -63,6 +63,7 @@ class BarChart extends Component {
 
         svg.append("g")
         .call(d3.axisLeft(y));
+
     }
   }
 

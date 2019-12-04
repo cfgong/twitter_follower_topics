@@ -21,5 +21,21 @@ link {
 	text-align: center;
 }
 
+h3 {
+	text-align: center;
+}
+table {
+	width: 150px;
+	text-align: center;
+}
+
+.suggestions {
+	width: 250px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 50px;
+	margin-top: 25px;
+}
+
 
 
