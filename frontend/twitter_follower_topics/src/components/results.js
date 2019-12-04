@@ -55,6 +55,7 @@ class ResultsPage extends Component {
       <p><Link to={routes.LANDING}>Back to home page</Link></p>
       <p>Below are two histrograms with 15 of the most used hashtags and words (topics) for followers of @{this.props.searched}</p>
 
+
       <div className="chartSpace">
         {content}
       </div>
