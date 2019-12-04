@@ -31,6 +31,14 @@ class LandingPage extends Component {
     history.push("/results");
   }
 
+  handleClick(parameter) {
+    console.log(parameter);
+    // get_data(parameter);
+    // const { history } = this.props;
+    // history.push("/results");
+    // console.log("2");
+  }
+
 
   render() {
     return (
@@ -53,27 +61,27 @@ class LandingPage extends Component {
           </thead>
           <tbody>
             <tr>
-              <td>ewarren</td>
-              <td>realDonaldTrump</td>
+              <td><a href="results.js" onClick={this.handleClick('ewarren')}>ewarren</a></td>
+              <td><a href="results.js" onClick={this.handleClick('realDonaldTrump')}>realDonaldTrump</a></td>
             </tr>
             <tr>
-              <td>JoeBiden</td>
+              <td><a href="results.js" onClick={this.handleClick('JoeBiden')}>JoeBiden</a></td>
               <td></td>
             </tr>
             <tr>
-              <td>SenSanders</td>
+              <td><a href="results.js" onClick={this.handleClick('SenSanders')}>SenSanders</a></td>
               <td></td>
             </tr>
             <tr>
-              <td>KamalaHarris</td>
+              <td><a href="results.js" onClick={this.handleClick('KamalaHarris')}>KamalaHarris</a></td>
               <td></td>
             </tr>
             <tr>
-              <td>CoryBooker</td>
+              <td><a href="results.js" onClick={this.handleClick('CoryBooker')}>CoryBooker</a></td>
               <td></td>
             </tr>
             <tr>
-              <td>AndrewYang</td>
+              <td><a href="results.js" onClick={this.handleClick('AndrewYang')}>AndrewYang</a></td>
               <td></td>
             </tr>
           </tbody>
