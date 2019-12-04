@@ -31,6 +31,11 @@ table {
 	margin-left: auto;
 }
 
+.loader {
 
+	display: inline-block;
+  margin-left: 0 auto;
+  margin-right: 0 auto;
+}
 
 
