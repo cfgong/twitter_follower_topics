@@ -48,7 +48,7 @@ class LandingPage extends Component {
 
 const mapStateToProps = (state) => ({
     data: state.dataState.data,
-
+    searched: state.searchedState.searched
   });
 
 export default compose(
