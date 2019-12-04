@@ -30,8 +30,12 @@ class ResultsPage extends Component {
 
       for(var i = 0; i < this.props.data.hash_counts.length; i++){
 
-        token_data.push({word:this.props.data.token_labels[i], word_count:this.props.data.token_counts[i]})
         hashtag_data.push({hashtag:this.props.data.hash_labels[i], hashtag_count:this.props.data.hash_counts[i]})
+      }
+
+      for(var i = 0; i < this.props.data.token_counts.length; i++){
+
+        token_data.push({word:this.props.data.token_labels[i], word_count:this.props.data.token_counts[i]})
       }
 
     }
@@ -44,7 +48,7 @@ class ResultsPage extends Component {
          height={100}
          width={100}
          class = "loader"
-         timeout={3000} //3 secs
+         timeout={99999999} //3 secs
 
       />) : (<><BarChart chart_data = {token_data} counts={this.props.data.token_counts} labels={this.props.data.token_labels} word_type = "word" className="chart"/>
         <BarChart chart_data = {hashtag_data} counts={this.props.data.hash_counts} labels={this.props.data.hash_labels} word_type = "hashtag" className="chart"/></>)

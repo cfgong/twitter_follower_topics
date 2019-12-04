@@ -26,6 +26,7 @@ class LandingPage extends Component {
 
   handleSubmit(event){
     event.preventDefault();
+    store.dispatch({ type: 'LOADING_SET', payload: true})
     get_data(this.state.search);
     store.dispatch({ type: 'SEARCHED_SET', payload: this.state.search})
     const { history } = this.props;
@@ -34,6 +35,7 @@ class LandingPage extends Component {
 
   handleClick(event) {
     event.preventDefault();
+    store.dispatch({ type: 'LOADING_SET', payload: true})
     get_data(event.target.getAttribute('name'));
     store.dispatch({ type: 'SEARCHED_SET', payload: event.target.getAttribute('name')})
     const { history } = this.props;

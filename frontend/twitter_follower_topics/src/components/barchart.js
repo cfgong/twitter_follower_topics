@@ -18,6 +18,8 @@ class BarChart extends Component {
 
   render() {
 
+    console.log(this.props.chart_data)
+
     return (
     	<div>
         <VictoryChart
