@@ -27,15 +27,10 @@ h3 {
 table {
 	width: 150px;
 	text-align: center;
+	margin-right: auto;
+	margin-left: auto;
 }
 
-.suggestions {
-	width: 250px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 50px;
-	margin-top: 25px;
-}
 
 
 
