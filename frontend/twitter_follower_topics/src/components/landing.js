@@ -17,6 +17,7 @@ class LandingPage extends Component {
     this.state = {search: ''}
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange(event){
@@ -31,12 +32,12 @@ class LandingPage extends Component {
     history.push("/results");
   }
 
-  handleClick(parameter) {
-    console.log(parameter);
-    // get_data(parameter);
-    // const { history } = this.props;
-    // history.push("/results");
-    // console.log("2");
+  handleClick(event) {
+    event.preventDefault();
+    get_data(event.target.getAttribute('name'));
+    store.dispatch({ type: 'SEARCHED_SET', payload: event.target.getAttribute('name')})
+    const { history } = this.props;
+    history.push("/results");
   }
 
 
@@ -61,27 +62,27 @@ class LandingPage extends Component {
           </thead>
           <tbody>
             <tr>
-              <td><a href="results.js" onClick={this.handleClick('ewarren')}>ewarren</a></td>
-              <td><a href="results.js" onClick={this.handleClick('realDonaldTrump')}>realDonaldTrump</a></td>
+              <td><a name="ewarren"  onClick={this.handleClick}>ewarren</a></td>
+              <td><a name="realDonaldTrump" onClick={this.handleClick}>realDonaldTrump</a></td>
             </tr>
             <tr>
-              <td><a href="results.js" onClick={this.handleClick('JoeBiden')}>JoeBiden</a></td>
+              <td><a name="JoeBiden" onClick={this.handleClick}>JoeBiden</a></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href="results.js" onClick={this.handleClick('SenSanders')}>SenSanders</a></td>
+              <td><a name="SenSanders" onClick={this.handleClick}>SenSanders</a></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href="results.js" onClick={this.handleClick('KamalaHarris')}>KamalaHarris</a></td>
+              <td><a name="KamalaHarris" onClick={this.handleClick}>KamalaHarris</a></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href="results.js" onClick={this.handleClick('CoryBooker')}>CoryBooker</a></td>
+              <td><a name="CoryBooker" onClick={this.handleClick}>CoryBooker</a></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href="results.js" onClick={this.handleClick('AndrewYang')}>AndrewYang</a></td>
+              <td><a name="AndrewYang" onClick={this.handleClick}>AndrewYang</a></td>
               <td></td>
             </tr>
           </tbody>

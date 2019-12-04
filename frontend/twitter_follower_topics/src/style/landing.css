@@ -39,3 +39,9 @@ table {
 }
 
 
+td {
+     cursor:pointer;
+     color:blue;
+     text-decoration:underline;
+}
+
