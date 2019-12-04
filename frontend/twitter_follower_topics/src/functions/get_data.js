@@ -13,6 +13,7 @@ export function get_data(str){
     })
     .then(function (response) {
       store.dispatch({ type: 'DATA_SET', payload: response["data"]})
+      store.dispatch({ type: 'LOADING_SET', payload: false})
     })
     .catch(function (error) {
       console.log("Twitter user does not exist");

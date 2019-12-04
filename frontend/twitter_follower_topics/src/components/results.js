@@ -11,6 +11,7 @@ import {
 import '../style/landing.css';
 
 import BarChart from './barchart';
+import Loader from 'react-loader-spinner'
 
 class ResultsPage extends Component {
 
@@ -20,63 +21,55 @@ class ResultsPage extends Component {
 
   render() {
 
+    var token_data = [];
+    var hashtag_data = [];
+
+    if(!isEmpty(this.props.data)){
+
+      
+
+      for(var i = 0; i < this.props.data.hash_counts.length; i++){
+
+        token_data.push({word:this.props.data.token_labels[i], word_count:this.props.data.token_counts[i]})
+        hashtag_data.push({hashtag:this.props.data.hash_labels[i], hashtag_count:this.props.data.hash_counts[i]})
+      }
+
+    }
+
+    console.log(this.props.loading);
+
+    let content = (this.props.loading) ? (<Loader
+         type="Circles"
+         color="brown"
+         height={100}
+         width={100}
+         class = "loader"
+         timeout={3000} //3 secs
+
+      />) : (<><BarChart chart_data = {token_data} counts={this.props.data.token_counts} labels={this.props.data.token_labels} word_type = "word" className="chart"/>
+        <BarChart chart_data = {hashtag_data} counts={this.props.data.hash_counts} labels={this.props.data.hash_labels} word_type = "hashtag" className="chart"/></>)
+
     return (
-      <>
+      <div>
       <h1>TopicTracker</h1>
+      <p><Link to={routes.LANDING}>Back to home page</Link></p>
       <p>Below are two histrograms with 15 of the most used hashtags and words (topics) for followers of @{this.props.searched}</p>
 
-      <h3>Candidate Suggestions (cached)</h3>
-      <div className="suggestions">
-        <table>
-        <thead>
-          <tr>
-            <th>Democrat</th>
-            <th>Republican</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>ewarren</td>
-            <td>realDonaldTrump</td>
-          </tr>
-          <tr>
-            <td>JoeBiden</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>SenSanders</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>KamalaHarris</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>CoryBooker</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>AndrewYang</td>
-            <td></td>
-          </tr>
-        </tbody>
-        </table>
-      </div>
-
       <div className="chartSpace">
-        <BarChart counts={this.props.data["hash_counts"]} labels={this.props.data["hash_labels"]} className="chart"/>
-        <BarChart counts={this.props.data["token_counts"]} labels={this.props.data["token_labels"]} className="chart"/>
+        {content}
       </div>
 
-      <p><Link to={routes.LANDING}>Back to home page</Link></p>
-      </>
+      
+      </div>
       );
   }
 }
 
 const mapStateToProps = (state) => ({
   data: state.dataState.data,
-  searched: state.searchedState.searched
+  searched: state.searchedState.searched,
+  loading: state.loadingState.loading,
+
 });
 
 export default compose(

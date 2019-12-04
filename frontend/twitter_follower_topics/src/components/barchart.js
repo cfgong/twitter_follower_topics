@@ -14,60 +14,48 @@ class BarChart extends Component {
 
   constructor(props){
     super(props);
-    //this.drawChart = this.drawChart.bind(this);
   }
 
   render() {
 
-    console.log("props",this.props.data);
-    console.log("searched", this.props.searched)
-
-    var token_data = [];
-    var hashtag_data = [];
-
-    if(!isEmpty(this.props.data)){
-
-      
-
-      for(var i = 0; i < this.props.data.hash_counts.length; i++){
-
-        token_data.push({word:this.props.data.token_labels[i], word_count:this.props.data.token_counts[i]})
-        hashtag_data.push({hashtag:this.props.data.hash_labels[i], hashtag_count:this.props.data.hash_counts[i]})
-      }
-
-    }
-
-    //this.drawChart();
-
     return (
     	<div>
         <VictoryChart
-          width={300} height={200}
+          width={275} height={175}
           domainPadding={20}
           theme={VictoryTheme.material}
+          //animate={{ duration: 100}}
           >
           <VictoryAxis
-          label = {"Word"}
+          label = {this.props.word_type}
           // tickValues specifies both the number of ticks and where
           // they are placed on the axis
-          tickFormat={this.props.data.token_labels}
-          style={{
-            axisLabel: {fontSize: 7, padding:20},
-            tickLabels: {fontSize: 3}
-          }}
+          tickFormat={this.props.labels}
+          style={(this.props.word_type != "hashtag") ? ({
+            axisLabel: {fontSize: 5, padding:20},
+            tickLabels: {fontSize: 3, angle:45}
+          }) : ({
+                          axisLabel: {fontSize: 5, padding:27},
+                          tickLabels: {fontSize: 3, angle:45}
+                        })}
         />
         <VictoryAxis
-          label = {"Word Count"}
+          label = {this.props.word_type + " count"}
           dependentAxis
           style={{
-            axisLabel: {fontSize: 7, padding:30},
+            axisLabel: {fontSize: 5, padding:30},
             tickLabels: {fontSize: 5}
           }}
         />
           <VictoryBar
-            data = {token_data}
-            x = "word"
-            y = "word_count"
+            labels = {this.props.counts}
+          animate={{
+            onLoad: { duration: 600 }
+          }}
+            data = {this.props.chart_data}
+            x = {this.props.word_type}
+            y = {this.props.word_type + "_count"}
+            style={{ labels: { fontSize: 4, padding: 1 } }}
           />
         </VictoryChart>
       </div>
