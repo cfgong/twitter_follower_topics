@@ -16,7 +16,7 @@ requests==2.22.0
 requests-oauthlib==1.2.0
 six==1.12.0
 twython==3.7.0
-urllib3==1.25.6
+urllib3==1.25.8
 Werkzeug==0.16.0
 nltk==3.4.5
 pandas==0.25.3
